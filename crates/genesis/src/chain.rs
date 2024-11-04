@@ -52,6 +52,12 @@ pub struct HardForkConfiguration {
     pub granite_time: Option<u64>,
     /// Holocene hardfork activation time
     pub holocene_time: Option<u64>,
+    /// Fermat hardfork activation time
+    pub fermat_time: Option<u64>,
+    /// Haber hardfork activation time
+    pub haber_time: Option<u64>,
+    /// Wright hardfork activation time
+    pub wright_time: Option<u64>,
 }
 
 /// Defines core blockchain settings per block.
@@ -194,11 +200,14 @@ impl ChainConfig {
             canyon_base_fee_params: config.as_canyon_base_fee_params(),
             regolith_time: Some(0),
             canyon_time: self.hardfork_configuration.canyon_time,
+            fermat_time: self.hardfork_configuration.fermat_time,
             delta_time: self.hardfork_configuration.delta_time,
             ecotone_time: self.hardfork_configuration.ecotone_time,
             fjord_time: self.hardfork_configuration.fjord_time,
             granite_time: self.hardfork_configuration.granite_time,
             holocene_time: self.hardfork_configuration.holocene_time,
+            haber_time: self.hardfork_configuration.haber_time,
+            wright_time: self.hardfork_configuration.wright_time,
             batch_inbox_address: self.batch_inbox_addr,
             deposit_contract_address: self
                 .addresses

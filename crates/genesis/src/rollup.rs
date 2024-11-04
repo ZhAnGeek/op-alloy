@@ -86,6 +86,9 @@ pub struct RollupConfig {
     /// otherwise.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub regolith_time: Option<u64>,
+    /// `fermat_time` sets the activation time for the Fermat network upgrade.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+    pub fermat_time: Option<u64>,
     /// `canyon_time` sets the activation time of the Canyon network upgrade.
     /// Active if `canyon_time` != None && L2 block timestamp >= Some(canyon_time), inactive
     /// otherwise.
@@ -116,6 +119,12 @@ pub struct RollupConfig {
     /// otherwise.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub holocene_time: Option<u64>,
+    /// `haber_time` sets the activation time for the Haber network upgrade.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+    pub haber_time: Option<u64>,
+    /// `wright_time` sets the activation time for the Wright network upgrade.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+    pub wright_time: Option<u64>,
     /// `batch_inbox_address` is the L1 address that batches are sent to.
     pub batch_inbox_address: Address,
     /// `deposit_contract_address` is the L1 address that deposits are sent to.
@@ -160,12 +169,15 @@ impl<'a> arbitrary::Arbitrary<'a> for RollupConfig {
             base_fee_params: params.as_base_fee_params(),
             canyon_base_fee_params: params.as_canyon_base_fee_params(),
             regolith_time: Option::<u64>::arbitrary(u)?,
+            fermat_time: Option::<u64>::arbitrary(u)?,
             canyon_time: Option::<u64>::arbitrary(u)?,
             delta_time: Option::<u64>::arbitrary(u)?,
             ecotone_time: Option::<u64>::arbitrary(u)?,
             fjord_time: Option::<u64>::arbitrary(u)?,
             granite_time: Option::<u64>::arbitrary(u)?,
             holocene_time: Option::<u64>::arbitrary(u)?,
+            haber_time: Option::<u64>::arbitrary(u)?,
+            wright_time: Option::<u64>::arbitrary(u)?,
             batch_inbox_address: Address::arbitrary(u)?,
             deposit_contract_address: Address::arbitrary(u)?,
             l1_system_config_address: Address::arbitrary(u)?,
@@ -193,12 +205,15 @@ impl Default for RollupConfig {
             base_fee_params: config.as_base_fee_params(),
             canyon_base_fee_params: config.as_canyon_base_fee_params(),
             regolith_time: None,
+            fermat_time: None,
             canyon_time: None,
             delta_time: None,
             ecotone_time: None,
             fjord_time: None,
             granite_time: None,
             holocene_time: None,
+            haber_time: None,
+            wright_time: None,
             batch_inbox_address: Address::ZERO,
             deposit_contract_address: Address::ZERO,
             l1_system_config_address: Address::ZERO,
@@ -347,12 +362,15 @@ pub const OP_MAINNET_CONFIG: RollupConfig = RollupConfig {
     base_fee_params: OP_MAINNET_BASE_FEE_PARAMS.as_base_fee_params(),
     canyon_base_fee_params: OP_MAINNET_BASE_FEE_PARAMS.as_canyon_base_fee_params(),
     regolith_time: Some(0_u64),
+    fermat_time: None,
     canyon_time: Some(1_704_992_401_u64),
     delta_time: Some(1_708_560_000_u64),
     ecotone_time: Some(1_710_374_401_u64),
     fjord_time: Some(1_720_627_201_u64),
     granite_time: Some(1_726_070_401_u64),
     holocene_time: None,
+    haber_time: None,
+    wright_time: None,
     batch_inbox_address: address!("ff00000000000000000000000000000000000010"),
     deposit_contract_address: address!("beb5fc579115071764c7423a4f12edde41f106ed"),
     l1_system_config_address: address!("229047fed2591dbec1ef1118d64f7af3db9eb290"),
@@ -395,12 +413,15 @@ pub const OP_SEPOLIA_CONFIG: RollupConfig = RollupConfig {
     base_fee_params: OP_SEPOLIA_BASE_FEE_PARAMS.as_base_fee_params(),
     canyon_base_fee_params: OP_SEPOLIA_BASE_FEE_PARAMS.as_canyon_base_fee_params(),
     regolith_time: Some(0),
+    fermat_time: None,
     canyon_time: Some(1699981200),
     delta_time: Some(1703203200),
     ecotone_time: Some(1708534800),
     fjord_time: Some(1716998400),
     granite_time: Some(1723478400),
     holocene_time: None,
+    haber_time: None,
+    wright_time: None,
     batch_inbox_address: address!("ff00000000000000000000000000000011155420"),
     deposit_contract_address: address!("16fc5058f25648194471939df75cf27a2fdc48bc"),
     l1_system_config_address: address!("034edd2a225f7f429a63e0f1d2084b9e0a93b538"),
@@ -442,6 +463,7 @@ pub const BASE_MAINNET_CONFIG: RollupConfig = RollupConfig {
     l2_chain_id: 8453,
     base_fee_params: OP_MAINNET_BASE_FEE_PARAMS.as_base_fee_params(),
     canyon_base_fee_params: OP_MAINNET_BASE_FEE_PARAMS.as_canyon_base_fee_params(),
+    fermat_time: None,
     regolith_time: Some(0_u64),
     canyon_time: Some(1704992401),
     delta_time: Some(1708560000),
@@ -449,6 +471,8 @@ pub const BASE_MAINNET_CONFIG: RollupConfig = RollupConfig {
     fjord_time: Some(1720627201),
     granite_time: Some(1_726_070_401_u64),
     holocene_time: None,
+    haber_time: None,
+    wright_time: None,
     batch_inbox_address: address!("ff00000000000000000000000000000000008453"),
     deposit_contract_address: address!("49048044d57e1c92a77f79988d21fa8faf74e97e"),
     l1_system_config_address: address!("73a79fab69143498ed3712e519a88a918e1f4072"),
@@ -491,12 +515,15 @@ pub const BASE_SEPOLIA_CONFIG: RollupConfig = RollupConfig {
     base_fee_params: BASE_SEPOLIA_BASE_FEE_PARAMS.as_base_fee_params(),
     canyon_base_fee_params: BASE_SEPOLIA_BASE_FEE_PARAMS.as_canyon_base_fee_params(),
     regolith_time: Some(0),
+    fermat_time: None,
     canyon_time: Some(1699981200),
     delta_time: Some(1703203200),
     ecotone_time: Some(1708534800),
     fjord_time: Some(1716998400),
     granite_time: Some(1723478400),
     holocene_time: None,
+    haber_time: None,
+    wright_time: None,
     batch_inbox_address: address!("ff00000000000000000000000000000000084532"),
     deposit_contract_address: address!("49f53e41452c74589e85ca1677426ba426459e85"),
     l1_system_config_address: address!("f272670eb55e895584501d564afeb048bed26194"),
