@@ -261,6 +261,21 @@ impl RollupConfig {
         self.holocene_time.map_or(false, |t| timestamp >= t)
     }
 
+    /// Returns true if Fermat is active at the given timestamp.
+    pub fn is_fermat_active(&self, timestamp: u64) -> bool {
+        self.fermat_time.map_or(false, |t| timestamp >= t)
+    }
+
+    /// Returns true if Haber is active at the given timestamp.
+    pub fn is_haber_active(&self, timestamp: u64) -> bool {
+        self.haber_time.map_or(false, |t| timestamp >= t)
+    }
+
+    /// Returns true if Wright is active at the given timestamp.
+    pub fn is_wright_active(&self, timestamp: u64) -> bool {
+        self.wright_time.map_or(false, |t| timestamp >= t)
+    }
+    
     /// Returns true if a DA Challenge proxy Address is provided in the rollup config and the
     /// address is not zero.
     pub fn is_alt_da_enabled(&self) -> bool {
